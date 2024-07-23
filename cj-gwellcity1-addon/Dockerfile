@@ -9,6 +9,9 @@ ARG BUILD_FROM
        python3 \
        py3-pip
 
+   # Upgrade pip
+   RUN pip3 install --no-cache-dir --upgrade pip
+
    # Install Python packages
    RUN pip3 install --no-cache-dir paho-mqtt requests
 
