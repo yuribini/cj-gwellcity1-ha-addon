@@ -1,0 +1,11 @@
+name: "CJ Gwellcity1 Addon"
+description: "Home Assistant addon for CJ Gwellcity1 apartment"
+version: "0.1.0"
+slug: "cj_gwellcity1_addon"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
