@@ -9,3 +9,17 @@ arch:
   - armhf
   - armv7
   - i386
+options:
+  mqtt_host: ""
+  mqtt_port: 1883
+  mqtt_username: ""
+  mqtt_password: ""
+  gwellcity1_host: ""
+  gwellcity1_port: 8899
+schema:
+  mqtt_host: str
+  mqtt_port: port
+  mqtt_username: str
+  mqtt_password: str
+  gwellcity1_host: str
+  gwellcity1_port: port
