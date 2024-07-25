@@ -4,6 +4,15 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Set S6 Overlay version
+ARG S6_OVERLAY_VERSION="3.1.5.0"
+
+# Install S6 Overlay
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${BUILD_ARCH}.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-${BUILD_ARCH}.tar.xz
+
 # Install system packages
 RUN apk add --no-cache \
     python3 \
@@ -15,9 +24,9 @@ RUN apk add --no-cache \
 COPY rootfs /
 
 # Set executable permissions
-RUN chmod a+x /etc/services.d/gwellcity1/run
-RUN chmod a+x /etc/services.d/gwellcity1/finish
-RUN chmod a+x /usr/bin/gwellcity1.py
+RUN chmod a+x /etc/services.d/gwellcity1/run \
+    && chmod a+x /etc/services.d/gwellcity1/finish \
+    && chmod a+x /usr/bin/gwellcity1.py
 
 # Build arguments
 ARG BUILD_ARCH
@@ -47,3 +56,6 @@ LABEL \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
+
+# Set S6 Overlay as the entrypoint
+ENTRYPOINT ["/init"]
