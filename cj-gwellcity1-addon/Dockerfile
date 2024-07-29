@@ -6,6 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set S6 Overlay version
 ARG S6_OVERLAY_VERSION="3.1.5.0"
+ARG BUILD_ARCH
 
 # Install S6 Overlay
 ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
@@ -29,7 +30,6 @@ RUN chmod a+x /etc/services.d/gwellcity1/run \
     && chmod a+x /usr/bin/gwellcity1.py
 
 # Build arguments
-ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
 ARG BUILD_NAME
