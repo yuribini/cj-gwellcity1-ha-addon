@@ -4,15 +4,17 @@ FROM $BUILD_FROM
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Set S6 Overlay version
 ARG S6_OVERLAY_VERSION="3.1.6.2"
 ARG BUILD_ARCH
 
-# Install S6 Overlay
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
-RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
-ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${BUILD_ARCH}.tar.xz /tmp
-RUN tar -C / -Jxpf /tmp/s6-overlay-${BUILD_ARCH}.tar.xz
+# Translate Home Assistant arch to S6 Overlay arch
+RUN if [ "${BUILD_ARCH}" = "amd64" ]; then S6_ARCH="x86_64"; \
+    elif [ "${BUILD_ARCH}" = "armv7" ]; then S6_ARCH="arm"; \
+    elif [ "${BUILD_ARCH}" = "aarch64" ]; then S6_ARCH="aarch64"; \
+    else S6_ARCH="${BUILD_ARCH}"; \
+    fi && \
+    curl -L -s "https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz" | tar -C / -Jxpf - && \
+    curl -L -s "https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.xz" | tar -C / -Jxpf -
 
 # Install system packages
 RUN apk add --no-cache \
